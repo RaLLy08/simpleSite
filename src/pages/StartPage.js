@@ -6,20 +6,14 @@ import Space from '../components/canvas/Space';
 
 const useStyles = makeStyles({
     root: {
-        backgroundColor: red[500],
-        height: '100vh',
-        overflow: 'hidden'
+        // backgroundColor: red[500],
+        // height: '100vh',
+        // overflow: 'hidden'
     },
     linkBox: {
         display: 'flex',
         justifyContent: 'center',
     },
-    canvas: {
-        // height: '100%',
-        // width: '100%',
-        backgroundColor: '#000',
-        backgroundImage: "radial-gradient(circle at top right, rgba(121, 68, 154, 0.13), transparent), radial-gradient(circle at 20% 80%, rgba(41, 196, 255, 0.13), transparent)"
-    }
 });
 
 const StartPage = props => {

@@ -15,7 +15,7 @@ const AppRouter = () => {
                         exact
                     />
                 )}
-                <Redirect to="/start" />
+                <Redirect to="/error-404" />
             </Switch>
         </Router>
     )
