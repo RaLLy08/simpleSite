@@ -22,7 +22,7 @@ const NotFoundPage = props => {
 
     return (
         <div className={classes.root}>
-            <Space />
+            <Space className="absolute"/>
             <div className={clsx(classes.notFound, "flex items-center justify-center")}>
                 <Typography variant="display2" color="inherit">
                     404 Page not found :(  

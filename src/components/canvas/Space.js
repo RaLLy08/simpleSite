@@ -1,12 +1,13 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/styles';
-import { useWindowResize } from '../../hooks';
+import { useWindowResize } from '../../@simple/hooks';
+import clsx from 'clsx';
 
 const useStyles = makeStyles({
     canvas: {
         // height: '100%',
         // width: '100%',
-        position: 'absolute',
+        // position: 'absolute',
         backgroundColor: '#000',
         backgroundImage: "radial-gradient(circle at top right, rgba(121, 68, 154, 0.13), transparent), radial-gradient(circle at 20% 80%, rgba(41, 196, 255, 0.13), transparent)"
     }
@@ -131,7 +132,7 @@ const Space = props => {
 
 
     return (
-        <canvas ref={canvasRef} className={classes.canvas}>
+        <canvas ref={canvasRef} className={clsx(classes.canvas, props.className)}>
            Sorry, <strong>CANVAS</strong> is not supported by your browser!
         </canvas >
     )
