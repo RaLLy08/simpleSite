@@ -1,8 +1,19 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
+
+
 const AnimateText = props => {
-    const { text, speed = 100, done, type } = props;
+    const { text, speed, done, type } = props;
+    const textArr = Array.from(text).map((el, i) => ({value: el, index: i}))
+    /* 
+        [
+           {
+                value: 'something',
+                index: 0
+           }
+        ]
+    */
 
     if (done) return text;
 
@@ -10,8 +21,8 @@ const AnimateText = props => {
 
     const getInitialState = () => {
         switch (type) {
-            case 'mix':
-                return Array.from(text).sort(() => Math.random() - 0.5).join('')
+            case 'selection':
+                return textArr.sort(() => Math.random() - 0.5)
             default:
                 return '';
         }
@@ -21,29 +32,30 @@ const AnimateText = props => {
         const newState = [...old];
 
         switch (type) {
-            case 'mix':
-                const expectedSymbol = text[step];
-                const currentSymbol = old[step];
-                // debugger
-                const expectedIndex = Array.from(old).slice(step).findIndex(el => el === expectedSymbol) + step
+            case 'selection':
+                const section = newState.slice(step);
+                let minElIndex = 0;
 
-                newState[step] = expectedSymbol;
-                
-                newState[expectedIndex] = currentSymbol;
+                for (let i = 0; i < section.length; i++) {
+                    const el = section[i];
+                    if (el.index < section[minElIndex].index) minElIndex = i;
+                }
 
-                // console.log(currentSymbol);
+                const currentEl = newState[step];
+
+                newState[step] = section[minElIndex];
+                newState[minElIndex + step] = currentEl;
                 break;
             default:
                 newState[step] = text[step];
                 break
         }
 
-
         return newState;
     }
 
     const [animText, setAnimText] = useState(getInitialState());
-    
+
     useEffect(() => {
         const update = setInterval(() => {
 
@@ -60,8 +72,12 @@ const AnimateText = props => {
     }, [])
   
     return <div style={{wordBreak: "break-all"}}>
-        {animText}
+        {animText.map(el => el.value)}
     </div>;
+}
+
+AnimateText.defaultProps = {
+    speed: 100,
 }
 
 AnimateText.propTypes = {

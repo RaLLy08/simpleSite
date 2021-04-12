@@ -8,9 +8,9 @@ export const App = () => {
   
   return(
     <Provider store={store}> 
-        <BrowserRouter >
+        <BrowserRouter>
           <AppRouter />
-        </BrowserRouter >
+        </BrowserRouter>
     </Provider>
   )
 }
