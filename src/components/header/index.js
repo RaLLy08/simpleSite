@@ -25,16 +25,16 @@ const buttonStyles = {
 const Header = () => {
     const { pathname } = useLocation();
     const history = useHistory();
-
+  
     const getActiveButtonsProps = name => {
-      if (name === pathname) {
+      if (pathname.includes(name)) {
         return {
           color: "primary", 
           variant: "contained",
         }
       }
     };
- 
+    console.log('render')
     return(
       <Root>
         <Buttons>
@@ -57,4 +57,4 @@ const Header = () => {
     )
 }
 
-export default Header;
+export default (Header);

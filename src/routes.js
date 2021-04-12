@@ -1,6 +1,7 @@
 import Post from "./components/post/Post";
 import Posts from "./components/posts/Posts";
 import AboutPage from "./pages/AboutPage";
+import FeaturesPage from "./pages/features/FeaturesPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import StartPage from "./pages/StartPage";
 
@@ -22,8 +23,8 @@ export const publicRoutes = [
         Component: AboutPage
     },
     {
-        path: '/features',
-        Component: AboutPage
+        path: '/features/:name?',
+        Component: FeaturesPage
     },
     {
         path: '/start-page',
