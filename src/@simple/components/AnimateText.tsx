@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { wordForSort } from '../types';
 
 interface AnimateTextInterface {
-    frame: (oldState: Array<wordForSort>, count: number, stop: () => void) => Array<wordForSort>,
-    speed: number,
+    frame: (oldState: Array<wordForSort>, stop: () => void) => Array<wordForSort>,
+    speed?: number,
     initState: Array<wordForSort>,
 }
 
@@ -11,18 +11,15 @@ const AnimateText = (props: AnimateTextInterface) => {
     const { initState, speed = 100, frame } = props;
 
     const [animText, setAnimText] = useState(initState);
-    let count = 0;
-
+    
     useEffect(() => {
         const stop = () => clearInterval(update);
 
         const update = setInterval(() => {
 
             setAnimText((oldState: Array<wordForSort>) => {
-                return frame(oldState, count, stop);
+                return frame(oldState, stop);
             });
-
-            count += 1;
           
         }, speed);
 
@@ -30,7 +27,7 @@ const AnimateText = (props: AnimateTextInterface) => {
     }, [])
     
     return <div style={{wordBreak: "break-all"}}>
-        {animText.map((el: wordForSort) => el.value)}
+        {animText && animText.map((el: wordForSort) => el.value)}
     </div>;
 }
 

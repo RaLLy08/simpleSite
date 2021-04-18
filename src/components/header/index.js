@@ -34,7 +34,6 @@ const Header = () => {
         }
       }
     };
-    console.log('render')
     return(
       <Root>
         <Buttons>

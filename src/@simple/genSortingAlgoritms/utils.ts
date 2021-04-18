@@ -1,0 +1,1 @@
+export const timeSleep = (ms: number): Promise<void> => new Promise((resolve, reject) => setTimeout(resolve, ms)); 
