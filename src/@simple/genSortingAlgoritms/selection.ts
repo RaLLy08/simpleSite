@@ -1,6 +1,8 @@
-import { wordForSort } from '../types';
+import { objectForSort, SortingGenerator } from "./types";
+
+
 // Array<wordForSort>
-function* selectionSort(array: Array<wordForSort>) {
+function* selectionSort(array: Array<objectForSort>): SortingGenerator {
     const newState = [...array];
 
     for (let i = 0; i < newState.length; i++) {

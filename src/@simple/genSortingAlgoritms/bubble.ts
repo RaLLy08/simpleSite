@@ -1,6 +1,7 @@
-import { wordForSort } from '../types';
+import { objectForSort, SortingGenerator } from "./types";
 
-function* bubbleSort(array: Array<wordForSort>) {
+
+function* bubbleSort(array: Array<objectForSort>): SortingGenerator {
     const newState = [...array];
     let swapped;
 

@@ -1,33 +1,69 @@
 import React, { useEffect, useState } from 'react';
-import { wordForSort } from '../types';
+import { Button } from '@material-ui/core';
+import { useRef } from 'react';
 
-interface AnimateTextInterface {
-    frame: (oldState: Array<wordForSort>, stop: () => void) => Array<wordForSort>,
-    speed?: number,
-    initState: Array<wordForSort>,
-}
+import { AnimateTextInterface, SortingTypesType, wordForSortType, SortingAlgoritmsType } from './types';
+import { bubbleSort, selectionSort } from '../genSortingAlgoritms';
+import { SortingGenerator } from '../genSortingAlgoritms/types';
+
 
 const AnimateText = (props: AnimateTextInterface) => {
-    const { initState, speed = 100, frame } = props;
+    const { text, speed = 100, type } = props;
 
-    const [animText, setAnimText] = useState(initState);
-    
+    const sortedText: Array<wordForSortType> = Array.from(text).map((el, i) => ({ value: el, index: i }));
+    const mixedText: Array<wordForSortType> = sortedText.sort(() => Math.random() - 0.5);
+
+    const [animText, setAnimText] = useState<Array<wordForSortType>>(mixedText);
+    const [isDone, setDone] = useState<boolean>(true);
+    const timeoutRef = useRef<any>();
+
+    const getSortingAlgoritms = (mixedText: Array<wordForSortType>): SortingAlgoritmsType => ({
+        selection: selectionSort(mixedText),
+        bubble:    bubbleSort(mixedText),
+    });
+
+    const getSortingAlgoritm =  (mixedText: Array<wordForSortType>, type: SortingTypesType): SortingGenerator => {
+        const algoritms = getSortingAlgoritms(mixedText);
+ 
+        if (type === 'random') {
+            const algsArr = Object.values(algoritms);
+            
+            return algsArr[Math.round(Math.random() * (algsArr.length - 1))]; // random from array
+        }
+
+        return algoritms[type];
+    };
+
+    const init = () => {
+        const gen = getSortingAlgoritm(mixedText, type);
+        setDone(false);
+
+        const update = () => {
+            setAnimText(gen.next().value);
+
+            if (!gen.next().done) {
+                timeoutRef.current = setTimeout(() => {
+                    update()
+                }, speed);
+            } else {
+                setDone(true);
+            };
+
+        }
+        update();
+    }
+
     useEffect(() => {
-        const stop = () => clearInterval(update);
+        init();
 
-        const update = setInterval(() => {
-
-            setAnimText((oldState: Array<wordForSort>) => {
-                return frame(oldState, stop);
-            });
-          
-        }, speed);
-
-        return () => clearInterval(update);
+        return () => clearTimeout(timeoutRef.current);
     }, [])
     
     return <div style={{wordBreak: "break-all"}}>
-        {animText && animText.map((el: wordForSort) => el.value)}
+        {animText.map((el: wordForSortType) => el.value)}
+        <Button disabled={!isDone} onClick={() => { init()}}>
+            Refresh
+        </Button>
     </div>;
 }
 

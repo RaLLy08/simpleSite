@@ -7,7 +7,6 @@ import SimplePage from '../@simple/pages/SimplePage';
 import AnimateText from '../@simple/components/AnimateText';
 import { bubbleSort, selectionSort } from '../@simple/genSortingAlgoritms';
 import { Button } from '@material-ui/core';
-import { wordForSort } from '../@simple/types';
 
 
 const useStyles = makeStyles(theme => ({
@@ -28,50 +27,21 @@ const AboutPage = () => {
         * @param {Array<{index: number, value: string}>}
     */
 
-    const sortedText = Array.from(text).map((el, i) => ({value: el, index: i}));
-    const mixedText = sortedText.sort(() => Math.random() - 0.5);
 
-    const getSortingAlgoritms = (textForSort: Array<wordForSort>) => [
-        {
-            gen: selectionSort(textForSort),
-            speed: 10
-        },
-        {
-            gen: bubbleSort(textForSort),
-            speed: 10
-        }
-    ];
- 
     const getRandFromArray = (array: Array<any>) => array[Math.round(Math.random() * (array.length - 1))];
 
-    const randAlgoritm = getRandFromArray(getSortingAlgoritms(mixedText));
-
-    React.useEffect(() => {
-        // console.log(bubble.gen.next());
-        
-    } , [])
-
+    // const randAlgoritm = getRandFromArray(getSortingAlgoritms(mixedText));
+   
     return (
         <SimplePage 
             header={<Header />}
             content={
                 <div className={clsx(classes.content, 'flex items-center')}>
                    <AnimateText
-                        speed={randAlgoritm.speed}
-                        initState={mixedText}
-                        frame={(state, stop) => {
-                            if (randAlgoritm.gen.next().done) {
-                                stop();
-
-                                return state;
-                            };
-
-                            return randAlgoritm.gen.next().value;
-                        }}
+                        speed={1}
+                        text={text}
+                        type="random"
                    />
-                   <Button >
-                        Refresh
-                   </Button>
                 </div>
             }
             footer={<Footer/>}
