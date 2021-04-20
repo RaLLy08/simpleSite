@@ -1,8 +1,8 @@
-import { objectForSort, SortingGenerator } from "./types";
+import { objectForSort, SortingGenerator, StepPointType } from "./types";
 
 
 // Array<wordForSort>
-function* selectionSort(array: Array<objectForSort>): SortingGenerator {
+function* selectionSort(array: Array<objectForSort>, stepPoint: StepPointType = 'n'): SortingGenerator {
     const newState = [...array];
 
     for (let i = 0; i < newState.length; i++) {
@@ -11,9 +11,12 @@ function* selectionSort(array: Array<objectForSort>): SortingGenerator {
                 
                 [ newState[j], newState[i] ] = [ newState[i], newState[j] ];
                 
-                yield [...newState];
+                if (stepPoint === 'n^2&swap') yield [...newState];
             }
+
+            if (stepPoint === 'n^2') yield [...newState];
         }
+        if (stepPoint === 'n') yield [...newState];
     }
     return newState;
 }

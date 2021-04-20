@@ -5,20 +5,17 @@ export interface WordForSortType {
 
 
 // add for new algorinm
-type algoritmsTypes =   
+type AlgoritmsTypes =   
     | 'bubble' 
     | 'selection'
 
-
-
 export type SortingTypesType = 
     | 'random' 
-    | algoritmsTypes
+    | AlgoritmsTypes
 
 
-export type SortingAlgoritmsType = { [K in algoritmsTypes]: any };
+export type SortingAlgoritmsType =  Record<AlgoritmsTypes, any>;
     
-
 export interface AnimateTextInterface {
     readonly speed?: number,
     readonly text: string,

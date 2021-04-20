@@ -1,7 +1,7 @@
-import { objectForSort, SortingGenerator } from "./types";
+import { objectForSort, SortingGenerator, StepPointType } from "./types";
 
 
-function* bubbleSort(array: Array<objectForSort>): SortingGenerator {
+function* bubbleSort(array: Array<objectForSort>, stepPoint: StepPointType = 'n'): SortingGenerator {
     const newState = [...array];
     let swapped;
 
@@ -13,9 +13,12 @@ function* bubbleSort(array: Array<objectForSort>): SortingGenerator {
                 [ newState[i], newState[i + 1] ] = [ newState[i + 1], newState[i] ];
                 swapped = false;
                 
-                yield [...newState];
+                if (stepPoint === 'n^2&swap') yield [...newState];
             }
+
+            if (stepPoint === 'n^2') yield [...newState];
         }
+        if (stepPoint === 'n') yield [...newState];
     }
 
     return newState;

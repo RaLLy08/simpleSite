@@ -10,3 +10,8 @@ export interface SortingGenerator<T = Array<objectForSort>, TReturn = Array<obje
     throw(e: any): IteratorResult<T, TReturn>;
     [Symbol.iterator](): Generator<T, TReturn, TNext>;
 }
+
+export type StepPointType = 
+    | 'n'
+    | 'n^2'
+    | 'n^2&swap'

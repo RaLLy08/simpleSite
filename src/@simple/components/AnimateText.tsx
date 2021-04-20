@@ -9,7 +9,7 @@ import { SortingGenerator } from '../genSortingAlgoritms/types';
 
 const AnimateText = (props: AnimateTextInterface) => {
     const { text, speed = 100, type } = props;
-
+    // by words speed / 10 or word math
     const sortedText: Array<WordForSortType> = Array.from(text).map((el, i) => ({ value: el, index: i }));
     const mixedText: Array<WordForSortType> = sortedText.sort(() => Math.random() - 0.5);
 
