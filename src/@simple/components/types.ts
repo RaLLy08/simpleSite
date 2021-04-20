@@ -1,4 +1,4 @@
-export interface wordForSortType {
+export interface WordForSortType {
     readonly index: number,                     
     readonly value: string,                        
 };

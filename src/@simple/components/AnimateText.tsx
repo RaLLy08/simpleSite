@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '@material-ui/core';
 import { useRef } from 'react';
 
-import { AnimateTextInterface, SortingTypesType, wordForSortType, SortingAlgoritmsType } from './types';
+import { AnimateTextInterface, SortingTypesType, WordForSortType, SortingAlgoritmsType } from './types';
 import { bubbleSort, selectionSort } from '../genSortingAlgoritms';
 import { SortingGenerator } from '../genSortingAlgoritms/types';
 
@@ -10,19 +10,19 @@ import { SortingGenerator } from '../genSortingAlgoritms/types';
 const AnimateText = (props: AnimateTextInterface) => {
     const { text, speed = 100, type } = props;
 
-    const sortedText: Array<wordForSortType> = Array.from(text).map((el, i) => ({ value: el, index: i }));
-    const mixedText: Array<wordForSortType> = sortedText.sort(() => Math.random() - 0.5);
+    const sortedText: Array<WordForSortType> = Array.from(text).map((el, i) => ({ value: el, index: i }));
+    const mixedText: Array<WordForSortType> = sortedText.sort(() => Math.random() - 0.5);
 
-    const [animText, setAnimText] = useState<Array<wordForSortType>>(mixedText);
+    const [animText, setAnimText] = useState<Array<WordForSortType>>(mixedText);
     const [isDone, setDone] = useState<boolean>(true);
     const timeoutRef = useRef<any>();
 
-    const getSortingAlgoritms = (mixedText: Array<wordForSortType>): SortingAlgoritmsType => ({
+    const getSortingAlgoritms = (mixedText: Array<WordForSortType>): SortingAlgoritmsType => ({
         selection: selectionSort(mixedText),
         bubble:    bubbleSort(mixedText),
     });
 
-    const getSortingAlgoritm =  (mixedText: Array<wordForSortType>, type: SortingTypesType): SortingGenerator => {
+    const getSortingAlgoritm =  (mixedText: Array<WordForSortType>, type: SortingTypesType): SortingGenerator => {
         const algoritms = getSortingAlgoritms(mixedText);
  
         if (type === 'random') {
@@ -60,7 +60,7 @@ const AnimateText = (props: AnimateTextInterface) => {
     }, [])
     
     return <div style={{wordBreak: "break-all"}}>
-        {animText.map((el: wordForSortType) => el.value)}
+        {animText.map((el: WordForSortType) => el.value)}
         <Button disabled={!isDone} onClick={() => { init()}}>
             Refresh
         </Button>
