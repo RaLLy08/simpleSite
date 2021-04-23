@@ -91,9 +91,9 @@ const AnimateText = (props: AnimateTextInterface) => {
             {animText.map((el: WordForSortType) => el.value)}
         </div>
         <div className="flex justify-end">
-            <Button size="small" onClick={() => { onRefresh()}}>
+            {/* <Button size="small" onClick={() => { onRefresh()}}>
                 {!isDone ? algNameRef.current : <RefreshIcon/>} 
-            </Button>
+            </Button> */}
         </div>
     </div>;
 }
