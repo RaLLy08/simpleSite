@@ -1,4 +1,7 @@
+import WordToCode from "./WordToCode";
+
 export const featuresPageRoutes = {
-    'dynamic-list': <> 1 </>,
-    'websocket-test': <> 2 </>
+    'dynamic-list': null,
+    'websocket-test': null,
+    'word-to-code': <WordToCode />
 }

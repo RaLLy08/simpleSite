@@ -25,6 +25,8 @@ const AboutPage = () => {
     
     // generate animation schema
 
+    // const schema = gene(text, )
+
     /**
         * @param {Array<{index: number, value: string}>}
     */
