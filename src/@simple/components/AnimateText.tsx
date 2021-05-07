@@ -1,94 +1,117 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from '@material-ui/core';
 import { useRef } from 'react';
 import { makeStyles } from '@material-ui/styles';
-import RefreshIcon from '@material-ui/icons/Refresh';
 
-import { AnimateTextInterface, SortingTypesType, WordForSortType, SortingAlgoritmsType } from './types';
-import { bubbleSort, selectionSort } from '../genSortingAlgoritms';
-import { SortingGenerator } from '../genSortingAlgoritms/types';
 import clsx from 'clsx';
 
 const useStyles = makeStyles(theme => ({
     textBox: {
         wordBreak: "break-all"
     },
-}))
+}));
 
+export interface AnimateTextInterface {
+    speed?: number,
+    frames: Array<string>,
+};
 
 const AnimateText = (props: AnimateTextInterface) => {
     const classes = useStyles();
 
-    const { text, speed = 100, type } = props;
+    const { frames, speed = 100 } = props;
     // by words speed / 10 or word math
-    const sortedText: Array<WordForSortType> = Array.from(text).map((el, i) => ({ value: el, index: i }));
-    const mixedText: Array<WordForSortType> = sortedText.sort(() => Math.random() - 0.5);
+    // const sortedText: Array<WordForSortType> = Array.from(text).map((el, i) => ({ value: el, index: i }));
+    // const mixedText: Array<WordForSortType> = sortedText.sort(() => Math.random() - 0.5);
 
-    const [animText, setAnimText] = useState<Array<WordForSortType>>(mixedText);
-    const [isDone, setDone] = useState<boolean>(true);
+    const [animText, setAnimText] = useState<string>(frames[0]);
+    // const [isDone, setDone] = useState<boolean>(true);
     const timeoutRef = useRef<any>();
-    const algNameRef = useRef<string>();
+    const countRef = useRef<number>(1);
 
-    const getSortingAlgoritms = (mixedText: Array<WordForSortType>): SortingAlgoritmsType => ({
-        selection: selectionSort(mixedText),
-        bubble:    bubbleSort(mixedText),
-    });
+    
+    // const cb = React.useCallback(someFunction, [])
+    // const cbRef = React.useRef(someFunction);
+    // const cbMemo = React.useMemo(() => ({current: someFunction}),[]);
 
-    const onRefresh = () => {
-        if (!isDone) {
-            clearTimeout(timeoutRef.current);
-            setDone(true);
-        };
-
-        init();
-    }
-
-    const getSortingAlgoritm =  (mixedText: Array<WordForSortType>, type: SortingTypesType): SortingGenerator => {
-        const algoritms = getSortingAlgoritms(mixedText);
  
-        if (type === 'random') {
-            const algsArr = Object.values(algoritms);
-            const algsNamesArr = Object.keys(algoritms);
+    // const algNameRef = useRef<string>(); 
+    
+    // const getSortingAlgoritms = (mixedText: Array<WordForSortType>): SortingAlgoritmsType => ({
+    //     selection: selectionSort(mixedText),
+    //     bubble:    bubbleSort(mixedText),
+    // });
 
-            const randInx: number = Math.round(Math.random() * (algsArr.length - 1));
-            algNameRef.current = algsNamesArr[randInx];
+    // const onRefresh = () => {
+    //     if (!isDone) {
+    //         clearTimeout(timeoutRef.current);
+    //         setDone(true);
+    //     };
 
-            return algsArr[randInx]; // random from array
-        }
-        algNameRef.current = type;
+    //     init();
+    // }
 
-        return algoritms[type];
-    };
+    // const getSortingAlgoritm =  (mixedText: Array<WordForSortType>, type: SortingTypesType): SortingGenerator => {
+    //     const algoritms = getSortingAlgoritms(mixedText);
+ 
+    //     if (type === 'random') {
+    //         const algsArr = Object.values(algoritms);
+    //         const algsNamesArr = Object.keys(algoritms);
 
-    const init = () => {
-        const gen = getSortingAlgoritm(mixedText, type);
-        // algNameRef
-        setDone(false);
+    //         const randInx: number = Math.round(Math.random() * (algsArr.length - 1));
+    //         algNameRef.current = algsNamesArr[randInx];
 
+    //         return algsArr[randInx]; // random from array
+    //     }
+    //     algNameRef.current = type;
+
+    //     return algoritms[type];
+    // };
+
+    // const init = () => {
+    //     // algNameRef
+    //     setDone(false);
+
+        // const update = () => {
+        //     setAnimText(gen.next().value);
+
+        //     if (!gen.next().done) {
+        //         timeoutRef.current = setTimeout(() => {
+        //             update()
+        //         }, speed);
+        //     } else {
+        //         setDone(true);
+        //     };
+
+        // }
+        // update();
+    // }
+
+    useEffect(() => {
+        countRef.current = 0;
+        // init();
         const update = () => {
-            setAnimText(gen.next().value);
-
-            if (!gen.next().done) {
+            
+            setAnimText(frames[countRef.current]);
+            
+            if (countRef.current < frames.length - 1) {
                 timeoutRef.current = setTimeout(() => {
                     update()
                 }, speed);
+
+                countRef.current += 1;
             } else {
-                setDone(true);
+                countRef.current = 0;
             };
-
         }
+
         update();
-    }
-
-    useEffect(() => {
-        init();
-
+        
         return () => clearTimeout(timeoutRef.current);
-    }, [])
+    }, [frames])
     // clsx(!isDone && classes.textBox, 'flex')
     return <div className="flex flex-col">
         <div className={clsx(classes.textBox, 'flex')}>
-            {animText.map((el: WordForSortType) => el.value)}
+            {animText}
         </div>
         <div className="flex justify-end">
             {/* <Button size="small" onClick={() => { onRefresh()}}>

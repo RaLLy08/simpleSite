@@ -1,7 +1,7 @@
-import { objectForSort, SortingGenerator, StepPointType } from "./types";
+import { IndexedValueType, SortingGeneratorInterface, StepPointType } from "./types";
 
 
-function* bubbleSort(array: Array<objectForSort>, stepPoint: StepPointType = 'n'): SortingGenerator {
+function* bubbleSort(array: Array<IndexedValueType>, stepPoint: StepPointType = 'n'): SortingGeneratorInterface {
     const newState = [...array];
     let swapped;
 

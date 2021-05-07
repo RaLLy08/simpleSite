@@ -1,8 +1,8 @@
-import { objectForSort, SortingGenerator, StepPointType } from "./types";
+import { IndexedValueType, SortingGeneratorInterface, StepPointType } from "./types";
 
 
 // Array<wordForSort>
-function* selectionSort(array: Array<objectForSort>, stepPoint: StepPointType = 'n'): SortingGenerator {
+function* selectionSort(array: Array<IndexedValueType>, stepPoint: StepPointType = 'n'): SortingGeneratorInterface {
     const newState = [...array];
 
     for (let i = 0; i < newState.length; i++) {
