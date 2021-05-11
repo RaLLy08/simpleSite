@@ -6,7 +6,8 @@ import clsx from 'clsx';
 
 const useStyles = makeStyles(theme => ({
     textBox: {
-        wordBreak: "break-all"
+        wordBreak: "break-all",
+        userSelect: 'none'
     },
 }));
 
@@ -113,11 +114,11 @@ const AnimateText = (props: AnimateTextInterface) => {
         <div className={clsx(classes.textBox, 'flex')}>
             {animText}
         </div>
-        <div className="flex justify-end">
-            {/* <Button size="small" onClick={() => { onRefresh()}}>
+        {/* <div className="flex justify-end">
+            <Button size="small" onClick={() => { onRefresh()}}>
                 {!isDone ? algNameRef.current : <RefreshIcon/>} 
-            </Button> */}
-        </div>
+            </Button>
+        </div> */}
     </div>;
 }
 

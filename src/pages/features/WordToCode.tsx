@@ -10,14 +10,22 @@ const useStyles = makeStyles(theme => ({
 const WordToCode = () => {
     const classes = useStyles();
     const [ inpValue, setInpValue ] = React.useState<string>('');
+    const [ errHelperText, setErrHelperText ] = React.useState<string>('');
     const [ language, setLanguage ] = React.useState<string>('Js');
 
     const changeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const expected = e.target.value.match(/[A-z .,\/#!$%\^&\*;:{}=\-_`~()]/g); 
+        const expected = e.target.value.match(/[A-z .,\/#!$%\^&\*;:{}=\-_`~()]/g) || []; 
+    
+        if (expected.length === e.target.value.length) {
+            setInpValue(expected.join('').toLowerCase());
 
-        setInpValue(expected ? expected.join('').toLowerCase() : '');
+            if (errHelperText) setErrHelperText('');
+        } else {
+            setErrHelperText('Use only english language please');
+        }
     } 
-
+    
+    
     const cipher = React.useMemo<any>(() => ({
         a: '(![] + [])[+!![]]',
         b: '(typeof (![]))[+![]]',
@@ -58,7 +66,7 @@ const WordToCode = () => {
     return (
         <div className="flex flex-auto flex-col">
             <div className="flex flex-1 mb-4">
-                <TextField fullWidth multiline value={inpValue} onChange={changeValue}/>
+                <TextField fullWidth multiline value={inpValue} onChange={changeValue} error={!!errHelperText} helperText={errHelperText}/>
             </div>
             <div className="flex flex-1 justify-end mb-16">
                 <Select

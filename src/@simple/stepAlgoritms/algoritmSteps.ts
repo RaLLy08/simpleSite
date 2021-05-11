@@ -3,7 +3,9 @@ import selectionSort from "./selection";
 import { IndexedValueType, SortingGeneratorInterface, StepPointType } from "./types";
 import { getRandKeyProperty } from "./utils";
 
-type MixedTypes = 'random' | 'reverse'; // ...
+type MixedTypes = 'reverseMix' | 'randomMix'; // ...
+
+type StepMixedTypes = 'random' | MixedTypes;
 
 type AlgoritmsTypes =  // ...
     | 'bubble' 
@@ -13,54 +15,108 @@ type StepSortTypes =
     | 'random' 
     | AlgoritmsTypes;
 
-type AlgoritmsTypesObject = Record<AlgoritmsTypes, (array: Array<IndexedValueType>, stepPoint: StepPointType) => SortingGeneratorInterface>;
+type StepAlgoritm = (array: Array<IndexedValueType>, stepPoint?: StepPointType) => SortingGeneratorInterface;
 
-const sortingGenerators = {  // ...
+type MixAlgoritm = (indexedArr: Array<IndexedValueType>) => Array<IndexedValueType>;
+
+type AlgoritmsTypesObject = Record<AlgoritmsTypes, StepAlgoritm>;
+
+type MixAlgoritmsTypesObject = Record<MixedTypes, MixAlgoritm>;
+
+const sortingGenerators: AlgoritmsTypesObject = {  // ...
     selection: selectionSort, // { name , alg}
     bubble:    bubbleSort,
 };
-// const sortingGenerators = [
-//     {
-//         algoritm: selectionSort,
-//         name: 'Selection'
-//     },
-//     {
-//         algoritm: bubbleSort,
-//         name: 'Bubble'
-//     }
-// ]
+
+
+const mixAlgoritms: Record<MixedTypes, MixAlgoritm>  = {
+    randomMix: (indexedArr) => {
+        const newState = [...indexedArr];
+
+        newState.sort(() => Math.random() - 0.5);
+
+        return newState;
+    },
+    reverseMix: (indexedArr) => {
+        const newState = [...indexedArr];
+
+        newState.reverse();
+
+        return newState;
+    } 
+}
+
+
+type SplitParamsType = {
+    splitBy: 'letter' | 'word', // ...
+    value: number
+}
 
 export class AlgoritmSteps {
     _indexedInitStr: Array<IndexedValueType>; // private readonly
-    _sortingGenerators: AlgoritmsTypesObject; // private
-    _stepSort: Array<Array<IndexedValueType>>; // private
-    _sortName: string | null;
+    _sortingGenerators: AlgoritmsTypesObject; // private readonly
+    _mixAlgoritms: MixAlgoritmsTypesObject; // private readonly
+    _stepSort: Array<Array<IndexedValueType>>; // private 
+    _mixedStr: Array<IndexedValueType>; // private readonly
+    sortName: string | null;
 
-    constructor(initStr: Array<string>) {
-        this._indexedInitStr = initStr.map((el, i) => ({ value: el, index: i }));
+    static splitInitTextBy(str: string, splitParams: SplitParamsType): Array<IndexedValueType> {
+        const { value, splitBy } = splitParams;
+        const toArr = Array.from(str);
 
-        this._sortingGenerators = sortingGenerators;
+        let result: Array<IndexedValueType> = [];
 
-        this._stepSort = [];
-        this._sortName = null;
-    }
+        // const a = {
+        //     letter: 
+        // }
 
-    stepSortString = (type: StepSortTypes): this => {
-        this._stepSort.length = 0;
-        let sortGen: SortingGeneratorInterface;
-
-        if (type === 'random') {
-            const { key, property} = getRandKeyProperty(this._sortingGenerators)
-    
-            sortGen = property(this._indexedInitStr, 'n');
-            this._sortName = key;
-        } else {
-            sortGen = this._sortingGenerators[type](this._indexedInitStr, 'n');
-            this._sortName = type;
+        switch (splitBy) {
+            case 'letter':
+                toArr.forEach((el, i) => result.push({ value: el, index: i }));
+                break;
+            case 'word':
+                // toArr.forEach((el, i) => result.push({ value: el, index: i }));
+                break;
         }
 
+        return result;
+    }
 
-        this._stepSort.push(this._indexedInitStr);
+    constructor(initStr: string, splitParams?: SplitParamsType) {
+        const defaultSplitParams: SplitParamsType = { value: 1, splitBy: 'letter'}; 
+        
+        this._indexedInitStr = AlgoritmSteps.splitInitTextBy(initStr, splitParams || defaultSplitParams);
+
+        // external readonly
+        this._sortingGenerators = sortingGenerators; 
+        this._mixAlgoritms = mixAlgoritms;
+        // 
+
+        // changeble
+        this._mixedStr = [];
+        this._stepSort = [];
+        this.sortName = null;
+        // 
+    }
+    
+    stepSortString = (type: StepSortTypes): this => {
+        this._stepSort.length = 0;
+        
+        let stepAlgoritm: StepAlgoritm;
+
+        if (type === 'random') {
+            const { key, property }: { key: string, property: StepAlgoritm} = getRandKeyProperty(this._sortingGenerators);
+    
+            stepAlgoritm = property;
+            this.sortName = key;
+        } else {
+            stepAlgoritm = this._sortingGenerators[type];
+            this.sortName = type;
+        }
+
+        this._stepSort.push(this._mixedStr);
+        const sortGen: SortingGeneratorInterface = stepAlgoritm(this._mixedStr);
+
         let step = sortGen.next();
 
         while (!step.done) {
@@ -71,20 +127,23 @@ export class AlgoritmSteps {
 
         return this;
     }
-
-    mixString = (type: MixedTypes): this => {
+    // ...
+    mixString = (type: StepMixedTypes): this => {
         // this._stepSort.length = 0;
+        // this.sortName = null;
+        let mixAlg: MixAlgoritm; 
 
-        switch (type) {
-            case 'reverse':
+        if (type === 'random') {
+            const { key, property }: { key: string, property: MixAlgoritm} = getRandKeyProperty(this._mixAlgoritms);
 
-                break;
-            case 'random':
-
-                this.randomMix();
-
-                break;
+            mixAlg = property;
+        } else {
+            mixAlg = this._mixAlgoritms[type];
         }
+
+        this._mixedStr.push(
+            ...mixAlg(this._indexedInitStr)
+        );
 
         return this;
     };
@@ -93,9 +152,5 @@ export class AlgoritmSteps {
 
     // getStringSteps = (): any => this._stepSort;
 
-    getSortAlgName = (): string | null => this._sortName;
-
-    randomMix = () => {
-        this._indexedInitStr.sort(() => Math.random() - 0.5);
-    }
+    getSortAlgName = (): string | null => this.sortName;
 }
