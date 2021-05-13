@@ -1,5 +1,4 @@
-import bubbleSort from "./bubble";
-import selectionSort from "./selection";
+import { selectionSort, bubbleSort} from "./sortAlgs";
 import { IndexedValueType, SortingGeneratorInterface, StepPointType } from "./types";
 import { getRandKeyProperty } from "./utils";
 
@@ -29,7 +28,7 @@ const sortingGenerators: AlgoritmsTypesObject = {  // ...
 };
 
 
-const mixAlgoritms: Record<MixedTypes, MixAlgoritm>  = {
+const mixAlgoritms: MixAlgoritmsTypesObject  = {
     randomMix: (indexedArr) => {
         const newState = [...indexedArr];
 
@@ -66,16 +65,13 @@ export class AlgoritmSteps {
 
         let result: Array<IndexedValueType> = [];
 
-        // const a = {
-        //     letter: 
-        // }
-
         switch (splitBy) {
             case 'letter':
                 toArr.forEach((el, i) => result.push({ value: el, index: i }));
                 break;
             case 'word':
-                // toArr.forEach((el, i) => result.push({ value: el, index: i }));
+                str.split(/(\s+)/).map((el, i) => result.push({ value: el, index: i }) );
+
                 break;
         }
 
@@ -115,7 +111,7 @@ export class AlgoritmSteps {
         }
 
         this._stepSort.push(this._mixedStr);
-        const sortGen: SortingGeneratorInterface = stepAlgoritm(this._mixedStr);
+        const sortGen: SortingGeneratorInterface = stepAlgoritm(this._mixedStr); 
 
         let step = sortGen.next();
 
