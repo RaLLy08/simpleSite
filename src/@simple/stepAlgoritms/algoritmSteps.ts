@@ -146,6 +146,7 @@ export class AlgoritmSteps {
 
     getStringSteps = (): Array<string> => this._stepSort.map((el: IndexedValueType[]): string => el.map(el => el.value).join(''));
 
+    // toSteps = (): 
     // getStringSteps = (): any => this._stepSort;
 
     getSortAlgName = (): string | null => this.sortName;

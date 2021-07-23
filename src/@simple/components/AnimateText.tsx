@@ -11,20 +11,20 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export interface AnimateTextInterface {
+interface AnimateTextInterface {
     speed?: number,
     frames: Array<string>,
 };
 
 const AnimateText = (props: AnimateTextInterface) => {
     const classes = useStyles();
-
+    
     const { frames, speed = 100 } = props;
     // by words speed / 10 or word math
     // const sortedText: Array<WordForSortType> = Array.from(text).map((el, i) => ({ value: el, index: i }));
     // const mixedText: Array<WordForSortType> = sortedText.sort(() => Math.random() - 0.5);
 
-    const [animText, setAnimText] = useState<string>(frames[0]);
+    const [frame, setFrame] = useState<string>(frames[0]);
     // const [isDone, setDone] = useState<boolean>(true);
     const timeoutRef = useRef<any>();
     const countRef = useRef<number>(1);
@@ -73,7 +73,7 @@ const AnimateText = (props: AnimateTextInterface) => {
     //     setDone(false);
 
         // const update = () => {
-        //     setAnimText(gen.next().value);
+        //     setFrame(gen.next().value);
 
         //     if (!gen.next().done) {
         //         timeoutRef.current = setTimeout(() => {
@@ -92,11 +92,11 @@ const AnimateText = (props: AnimateTextInterface) => {
         // init();
         const update = () => {
             
-            setAnimText(frames[countRef.current]);
+            setFrame(frames[countRef.current]);
             
             if (countRef.current < frames.length - 1) {
                 timeoutRef.current = setTimeout(() => {
-                    update()
+                    update();
                 }, speed);
 
                 countRef.current += 1;
@@ -112,7 +112,7 @@ const AnimateText = (props: AnimateTextInterface) => {
     // clsx(!isDone && classes.textBox, 'flex')
     return <div className="flex flex-col">
         <div className={clsx(classes.textBox, 'flex')}>
-            {animText}
+            {frame}
         </div>
         {/* <div className="flex justify-end">
             <Button size="small" onClick={() => { onRefresh()}}>

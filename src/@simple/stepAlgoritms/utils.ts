@@ -1,4 +1,3 @@
-
 export const timeSleep = (ms: number): Promise<void> => new Promise((resolve, reject) => setTimeout(resolve, ms)); 
 export const getRandKeyProperty = (obj: object): { key: string; property: any } => {
     const propsArr: Array<any> = Object.values(obj);

@@ -26,13 +26,10 @@ const AboutPage = () => {
     // generate animation schema
     const algoritmSteps = new AlgoritmSteps(text)
         .mixString('random')
-        .stepSortString('random') // separation word and swaping use!!! random scheme use!!!
-
+        .stepSortString('random')
+        .getStringSteps(); // separation word and swaping use!!! random scheme use!!!
     // also add panel of manegment in triple click!
 
-    
-    console.log(algoritmSteps);
-    
     // console.log(Alg._sortName);
     
     // const schema = gene(text, )
@@ -49,12 +46,8 @@ const AboutPage = () => {
                 <div className={clsx(classes.content, 'flex items-center')}>
                    <AnimateText
                         speed={20}
-                        // text={text}
-                        // type="random"
-                        frames={algoritmSteps.getStringSteps()}
-                        // or schema ['a', 'aaa']
+                        frames={algoritmSteps}
                    />
-
                 </div>
             }
             footer={<Footer/>}

@@ -20,7 +20,6 @@ const FeaturesPage = () => {
     const history = useHistory();
 
     const Component = featuresPageRoutes[name];
-
     return (
         <SimplePage 
             header={<Header/>}
